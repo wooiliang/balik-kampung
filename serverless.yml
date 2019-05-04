@@ -1,0 +1,28 @@
+service: sls-balik-kampung
+
+frameworkVersion: ">=1.28.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: go1.x
+  region: ap-southeast-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+        - "dynamodb:Query"
+        - "sns:Publish"
+      Resource: "*"
+
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
+
+functions:
+  main:
+    handler: bin/main
+    memorySize: 128
+    environment:
+      AWS_ACCOUNT_ID: !Ref AWS::AccountId
